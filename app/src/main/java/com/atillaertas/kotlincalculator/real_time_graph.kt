@@ -24,14 +24,16 @@ import com.androidplot.xy.SimpleXYSeries
 import com.androidplot.xy.StepMode
 import com.androidplot.xy.XYGraphWidget
 import com.androidplot.xy.XYPlot
+import com.androidplot.xy.XYSeries
 import java.lang.Math.pow
 import java.text.DecimalFormat
 import kotlin.math.atan
 import kotlin.math.pow
+import kotlin.math.sin
 import kotlin.math.sqrt
 
 class real_time_graph : AppCompatActivity() , SensorEventListener {
-    private val HISTORY_SIZE = 1000.0
+    private val HISTORY_SIZE = 600.0
 
     private lateinit var sensorMgr: SensorManager
     private lateinit var orSensor : Sensor
@@ -44,16 +46,20 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
     private lateinit var aLvlSeries : SimpleXYSeries
     private lateinit var pLvlSeries: SimpleXYSeries
     private lateinit var rLvlSeries: SimpleXYSeries
+
     private lateinit var azimuthHistorySeries : SimpleXYSeries
     private lateinit var pitchHistorySeries : SimpleXYSeries
     private lateinit var rollHistorySeries : SimpleXYSeries
+    private lateinit var sinusHistorySeries : SimpleXYSeries
 
     private lateinit var aLvlSeriesColor : BarFormatter
     private lateinit var pLvlSeriesColor : BarFormatter
     private lateinit var rLvlSeriesColor : BarFormatter
+
     private lateinit var azimuthHistorySeriesColor : LineAndPointFormatter
     private lateinit var pitchHistorySeriesColor : LineAndPointFormatter
     private lateinit var rollHistorySeriesColor : LineAndPointFormatter
+    private lateinit var sinusHistorySeriesColor : LineAndPointFormatter
 
     private lateinit var redrawer: Redrawer
 
@@ -64,7 +70,7 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
 
         // setup the APR Levels plot
         aprLevelsPlot = findViewById(R.id.aprLevelsPlot)
-        aprLevelsPlot.setDomainBoundaries(-1,1,BoundaryMode.FIXED)
+        aprLevelsPlot.setDomainBoundaries(-2,2,BoundaryMode.FIXED)
 
         aLvlSeries = SimpleXYSeries("A")
         pLvlSeries = SimpleXYSeries("P")
@@ -86,7 +92,7 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
         // boundaries to those values.  If we did not do this, the plot would auto-range which
         // can be visually confusing in the case of dynamic plots.
 
-        aprLevelsPlot.setRangeBoundaries(-180,359,BoundaryMode.FIXED)
+        aprLevelsPlot.setRangeBoundaries(-1,1,BoundaryMode.FIXED)
 
         // update our domain and range axis labels:
         aprLevelsPlot.setDomainLabel("")
@@ -106,16 +112,20 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
         pitchHistorySeries.useImplicitXVals()
         rollHistorySeries = SimpleXYSeries("Roll")
         rollHistorySeries.useImplicitXVals()
+        sinusHistorySeries = SimpleXYSeries("Sinus")
+        sinusHistorySeries.useImplicitXVals()
 
         azimuthHistorySeriesColor = LineAndPointFormatter(Color.rgb(100,100,200),null,null,null)
         pitchHistorySeriesColor = LineAndPointFormatter(Color.rgb(100,200,100),null,null,null)
         rollHistorySeriesColor = LineAndPointFormatter(Color.rgb(200,100,100),null,null,null)
+        sinusHistorySeriesColor = LineAndPointFormatter(Color.rgb(200,100,100),null,null,null)
 
-        aprHistoryPlot.setRangeBoundaries(-180,359,BoundaryMode.FIXED)
+        aprHistoryPlot.setRangeBoundaries(-2,2,BoundaryMode.FIXED)
         aprHistoryPlot.setDomainBoundaries(0,HISTORY_SIZE,BoundaryMode.FIXED)
         aprHistoryPlot.addSeries(azimuthHistorySeries,azimuthHistorySeriesColor)
         aprHistoryPlot.addSeries(pitchHistorySeries,pitchHistorySeriesColor)
         aprHistoryPlot.addSeries(rollHistorySeries,rollHistorySeriesColor)
+        aprHistoryPlot.addSeries(sinusHistorySeries,sinusHistorySeriesColor)
         aprHistoryPlot.domainStepMode = StepMode.INCREMENT_BY_VAL
         aprHistoryPlot.domainStepValue = HISTORY_SIZE / 10
         aprHistoryPlot.linesPerRangeLabel = 3
@@ -170,8 +180,8 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
 
         sensorMgr = applicationContext.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
-        for (sensor in sensorMgr.getSensorList(Sensor.TYPE_ORIENTATION)){
-            if (sensor.type == Sensor.TYPE_ORIENTATION){
+        for (sensor in sensorMgr.getSensorList(Sensor.TYPE_ACCELEROMETER)){ /* sensor degisim !*/
+            if (sensor.type == Sensor.TYPE_ACCELEROMETER){
                 orSensor = sensor
             }
         }
@@ -186,8 +196,8 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
 
         redrawer = Redrawer(
             listOf(aprHistoryPlot,aprLevelsPlot),
-            33.33f,
-            false
+            33.3f,
+            true
         )
     }
 
@@ -195,6 +205,7 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
     public override fun onResume() {
         super.onResume()
         redrawer.start()
+
     }
 
     @Override
@@ -215,6 +226,11 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
     }
 
     override fun onSensorChanged(sensorEvent: SensorEvent?) {
+
+        var sinusList = generateSinusoidalData(1.0,1.0,0.0,10)
+
+
+
         aLvlSeries.setModel(
             listOf(sensorEvent?.values?.get(0)),
             SimpleXYSeries.ArrayFormat.Y_VALS_ONLY
@@ -230,18 +246,41 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
             SimpleXYSeries.ArrayFormat.Y_VALS_ONLY
         )
 
+
         // get rid the oldest sample in history:
-        if (rollHistorySeries.size() > HISTORY_SIZE) {
+       /* if (rollHistorySeries.size() > HISTORY_SIZE) {
             rollHistorySeries.removeFirst()
             pitchHistorySeries.removeFirst()
             azimuthHistorySeries.removeFirst()
+
+        }*/
+        if (sinusHistorySeries.size() > HISTORY_SIZE) {
+            sinusHistorySeries.removeFirst()
         }
 
         // add the latest history sample:
 
-        azimuthHistorySeries.addLast(null,sensorEvent?.values?.get(0))
-        pitchHistorySeries.addLast(null,sensorEvent?.values?.get(1))
-        rollHistorySeries.addLast(null,sensorEvent?.values?.get(2))
+        //azimuthHistorySeries.addLast(null,sensorEvent?.values?.get(0))
+        //pitchHistorySeries.addLast(null,sensorEvent?.values?.get(1))
+        //rollHistorySeries.addLast(null,sensorEvent?.values?.get(2))
+
+        var i : Int
+
+
+        for ( i in sinusList){
+
+            sinusHistorySeries.addLast(null,i)
+
+            Log.d("sinusHistorySeriesSize", "${sinusHistorySeries.size()}")
+            Log.d("SinusList Size","${sinusList.size}")
+        }
+
+
+        Log.d("data","")
+
+
+
+
 
 
         //angle
@@ -264,4 +303,28 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
 
     }
+    fun generateSinusoidalData(
+        amplitude: Double,
+        frequency: Double,
+        phaseShift: Double,
+        numPoints: Int
+    ): List<Number?> {
+        val data = mutableListOf<Number?>()
+
+        val stepSize = (2 * Math.PI) / numPoints
+        var x = 0.0
+
+        for (i in 0 until numPoints) {
+            val y = amplitude * sin(frequency * x + phaseShift)
+            data.add(y)
+
+            x += stepSize
+        }
+
+        return data
+    }
+
+
+
+
 }
