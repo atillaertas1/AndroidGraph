@@ -24,7 +24,11 @@ import com.androidplot.xy.SimpleXYSeries
 import com.androidplot.xy.StepMode
 import com.androidplot.xy.XYGraphWidget
 import com.androidplot.xy.XYPlot
+import java.lang.Math.pow
 import java.text.DecimalFormat
+import kotlin.math.atan
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 class real_time_graph : AppCompatActivity() , SensorEventListener {
     private val HISTORY_SIZE = 1000.0
@@ -166,8 +170,8 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
 
         sensorMgr = applicationContext.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
-        for (sensor in sensorMgr.getSensorList(Sensor.TYPE_ACCELEROMETER)){
-            if (sensor.type == Sensor.TYPE_ACCELEROMETER){
+        for (sensor in sensorMgr.getSensorList(Sensor.TYPE_ORIENTATION)){
+            if (sensor.type == Sensor.TYPE_ORIENTATION){
                 orSensor = sensor
             }
         }
@@ -182,7 +186,7 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
 
         redrawer = Redrawer(
             listOf(aprHistoryPlot,aprLevelsPlot),
-            100f,
+            33.33f,
             false
         )
     }
@@ -239,6 +243,22 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
         pitchHistorySeries.addLast(null,sensorEvent?.values?.get(1))
         rollHistorySeries.addLast(null,sensorEvent?.values?.get(2))
 
+
+        //angle
+/*
+        var x : Double = sensorEvent?.values?.get(0)?.toDouble() ?: 0.0
+        var y : Double = sensorEvent?.values?.get(1)?.toDouble() ?: 0.0
+        var z : Double = sensorEvent?.values?.get(2)?.toDouble() ?: 0.0
+
+        var pitch : Double = Math.atan(x/Math.sqrt(Math.pow(y,2.0) + Math.pow(z,2.0)))
+        var roll : Double = Math.atan(y/Math.sqrt(Math.pow(x,2.0) + Math.pow(z,2.0)))
+
+        pitch = pitch * (180 / Math.PI)
+        roll = roll * (180 / Math.PI)
+
+        Log.d("pitch-roll","$pitch <=> $roll")
+
+*/
     }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
