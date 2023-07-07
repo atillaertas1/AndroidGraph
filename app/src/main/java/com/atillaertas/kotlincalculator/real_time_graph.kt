@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowInsets
+import android.widget.Button
 import android.widget.CheckBox
 import com.androidplot.util.PixelUtils
 import com.androidplot.util.PlotStatistics
@@ -32,11 +34,11 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-class real_time_graph : AppCompatActivity() , SensorEventListener {
-    private val HISTORY_SIZE = 600.0
+class real_time_graph : AppCompatActivity()  {
+    private val HISTORY_SIZE = 100.0
 
-    private lateinit var sensorMgr: SensorManager
-    private lateinit var orSensor : Sensor
+    //private lateinit var sensorMgr: SensorManager
+    //private lateinit var orSensor : Sensor
     private lateinit var aprLevelsPlot : XYPlot
     private lateinit var aprHistoryPlot : XYPlot
 
@@ -68,9 +70,16 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_real_time_graph)
 
+        var updateButton: Button = findViewById(R.id.updateButton)
+        var stopButton: Button = findViewById(R.id.stopButton)
+        var startButton: Button = findViewById(R.id.startButton)
+        var graphIsFinish: Boolean = false
+        var updateButtonIsActive = true
+        //var graphController : Boolean = true
+
         // setup the APR Levels plot
         aprLevelsPlot = findViewById(R.id.aprLevelsPlot)
-        aprLevelsPlot.setDomainBoundaries(-2,2,BoundaryMode.FIXED)
+        aprLevelsPlot.setDomainBoundaries(-2, 2, BoundaryMode.FIXED)
 
         aLvlSeries = SimpleXYSeries("A")
         pLvlSeries = SimpleXYSeries("P")
@@ -80,9 +89,9 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
         pLvlSeriesColor = BarFormatter(Color.rgb(200, 0, 0), Color.rgb(0, 80, 0))
         rLvlSeriesColor = BarFormatter(Color.rgb(0, 0, 200), Color.rgb(0, 80, 0))
 
-        aprLevelsPlot.addSeries(aLvlSeries,aLvlSeriesColor)
-        aprLevelsPlot.addSeries(pLvlSeries,pLvlSeriesColor)
-        aprLevelsPlot.addSeries(rLvlSeries,rLvlSeriesColor)
+        aprLevelsPlot.addSeries(aLvlSeries, aLvlSeriesColor)
+        aprLevelsPlot.addSeries(pLvlSeries, pLvlSeriesColor)
+        aprLevelsPlot.addSeries(rLvlSeries, rLvlSeriesColor)
 
         aprLevelsPlot.domainStepValue = 3.0
         aprLevelsPlot.linesPerRangeLabel = 3
@@ -92,7 +101,7 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
         // boundaries to those values.  If we did not do this, the plot would auto-range which
         // can be visually confusing in the case of dynamic plots.
 
-        aprLevelsPlot.setRangeBoundaries(-1,1,BoundaryMode.FIXED)
+        aprLevelsPlot.setRangeBoundaries(-1, 1, BoundaryMode.FIXED)
 
         // update our domain and range axis labels:
         aprLevelsPlot.setDomainLabel("")
@@ -115,17 +124,18 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
         sinusHistorySeries = SimpleXYSeries("Sinus")
         sinusHistorySeries.useImplicitXVals()
 
-        azimuthHistorySeriesColor = LineAndPointFormatter(Color.rgb(100,100,200),null,null,null)
-        pitchHistorySeriesColor = LineAndPointFormatter(Color.rgb(100,200,100),null,null,null)
-        rollHistorySeriesColor = LineAndPointFormatter(Color.rgb(200,100,100),null,null,null)
-        sinusHistorySeriesColor = LineAndPointFormatter(Color.rgb(200,100,100),null,null,null)
+        azimuthHistorySeriesColor =
+            LineAndPointFormatter(Color.rgb(100, 100, 200), null, null, null)
+        pitchHistorySeriesColor = LineAndPointFormatter(Color.rgb(100, 200, 100), null, null, null)
+        rollHistorySeriesColor = LineAndPointFormatter(Color.rgb(200, 100, 100), null, null, null)
+        sinusHistorySeriesColor = LineAndPointFormatter(Color.rgb(200, 50, 100), null, null, null)
 
-        aprHistoryPlot.setRangeBoundaries(-2,2,BoundaryMode.FIXED)
-        aprHistoryPlot.setDomainBoundaries(0,HISTORY_SIZE,BoundaryMode.FIXED)
-        aprHistoryPlot.addSeries(azimuthHistorySeries,azimuthHistorySeriesColor)
-        aprHistoryPlot.addSeries(pitchHistorySeries,pitchHistorySeriesColor)
-        aprHistoryPlot.addSeries(rollHistorySeries,rollHistorySeriesColor)
-        aprHistoryPlot.addSeries(sinusHistorySeries,sinusHistorySeriesColor)
+        aprHistoryPlot.setRangeBoundaries(-2, 2, BoundaryMode.FIXED)
+        aprHistoryPlot.setDomainBoundaries(0, HISTORY_SIZE, BoundaryMode.FIXED)
+        aprHistoryPlot.addSeries(azimuthHistorySeries, azimuthHistorySeriesColor)
+        aprHistoryPlot.addSeries(pitchHistorySeries, pitchHistorySeriesColor)
+        aprHistoryPlot.addSeries(rollHistorySeries, rollHistorySeriesColor)
+        aprHistoryPlot.addSeries(sinusHistorySeries, sinusHistorySeriesColor)
         aprHistoryPlot.domainStepMode = StepMode.INCREMENT_BY_VAL
         aprHistoryPlot.domainStepValue = HISTORY_SIZE / 10
         aprHistoryPlot.linesPerRangeLabel = 3
@@ -135,26 +145,26 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
         aprHistoryPlot.rangeTitle.pack()
 
         aprHistoryPlot.graph.getLineLabelStyle(XYGraphWidget.Edge.LEFT).format = DecimalFormat("#")
-        aprHistoryPlot.graph.getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).format = DecimalFormat("#")
+        aprHistoryPlot.graph.getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).format =
+            DecimalFormat("#")
 
         // setup checkboxes:
 
         hwAcceleratedCb = findViewById(R.id.hwAccelerationCb)
 
-        val levelStats = PlotStatistics(1000,false)
-        val histStats = PlotStatistics(1000,false)
+        val levelStats = PlotStatistics(1000, false)
+        val histStats = PlotStatistics(1000, false)
 
         aprLevelsPlot.addListener(levelStats)
         aprHistoryPlot.addListener(histStats)
 
         hwAcceleratedCb.setOnCheckedChangeListener { compoundButton, b ->
             if (b) {
-                aprLevelsPlot.setLayerType(View.LAYER_TYPE_NONE,null)
-                aprHistoryPlot.setLayerType(View.LAYER_TYPE_NONE,null)
-            }
-            else {
-                aprLevelsPlot.setLayerType(View.LAYER_TYPE_SOFTWARE,null)
-                aprHistoryPlot.setLayerType(View.LAYER_TYPE_SOFTWARE,null)
+                aprLevelsPlot.setLayerType(View.LAYER_TYPE_NONE, null)
+                aprHistoryPlot.setLayerType(View.LAYER_TYPE_NONE, null)
+            } else {
+                aprLevelsPlot.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                aprHistoryPlot.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
             }
         }
 
@@ -167,17 +177,20 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
 
         // get a ref to the BarRenderer so we can make some changes to it:
 
-        val barRenderer: BarRenderer<BarFormatter> = aprLevelsPlot.getRenderer(BarRenderer::class.java) as BarRenderer<BarFormatter>
+        val barRenderer: BarRenderer<BarFormatter> =
+            aprLevelsPlot.getRenderer(BarRenderer::class.java) as BarRenderer<BarFormatter>
 
         if (barRenderer != null) {
-            barRenderer.setBarGroupWidth(BarRenderer.BarGroupWidthMode.FIXED_WIDTH,
+            barRenderer.setBarGroupWidth(
+                BarRenderer.BarGroupWidthMode.FIXED_WIDTH,
                 PixelUtils.dpToPix(
-                18F
-            ))
+                    18F
+                )
+            )
         }
 
         // register for orientation sensor events:
-
+        /*
         sensorMgr = applicationContext.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
         for (sensor in sensorMgr.getSensorList(Sensor.TYPE_ACCELEROMETER)){ /* sensor degisim !*/
@@ -193,18 +206,63 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
         }
 
         sensorMgr.registerListener(this,orSensor,SensorManager.SENSOR_DELAY_UI)
-
+*/
         redrawer = Redrawer(
-            listOf(aprHistoryPlot,aprLevelsPlot),
+            listOf(aprHistoryPlot, aprLevelsPlot),
             33.3f,
             true
         )
+
+
+        updateButton.setOnClickListener {
+            if (updateButtonIsActive) {
+                Thread {
+                    while (true) {
+                        val sinusList = generateSinusoidalData(1.0, 1.0, 0.0, 10)
+
+                        if (sinusHistorySeries.size() > HISTORY_SIZE) {
+                            val numToRemove = sinusHistorySeries.size() - HISTORY_SIZE
+
+                            for (i in 0 until numToRemove.toInt()) {
+                                sinusHistorySeries.removeFirst()
+                            }
+                        }
+
+                        for (i in sinusList) {
+                            sinusHistorySeries.addLast(null, i)
+                        }
+                    }
+                }.start()
+                updateButtonIsActive = false
+            }
+        }
+
+        stopButton.setOnClickListener {
+            redrawer.finish()
+            graphIsFinish = true
+        }
+
+        startButton.setOnClickListener {
+            if (graphIsFinish) {
+                redrawer = Redrawer(
+                    listOf(aprHistoryPlot, aprLevelsPlot),
+                    33.3f,
+                    true
+                )
+                redrawer.start()
+            }
+        }
+
+        window.decorView.systemUiVisibility =
+            (View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
     }
 
     @Override
     public override fun onResume() {
         super.onResume()
         redrawer.start()
+
+        Log.d("deneme","deneme")
 
     }
 
@@ -218,19 +276,18 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
         redrawer.finish()
         super.onDestroy()
     }
-
+/*
     private fun cleanUp() {
         // aunregister with the orientation sensor before exiting:
         sensorMgr.unregisterListener(this)
         finish()
     }
-
+*//*
     override fun onSensorChanged(sensorEvent: SensorEvent?) {
 
-        var sinusList = generateSinusoidalData(1.0,1.0,0.0,10)
 
 
-
+        /*
         aLvlSeries.setModel(
             listOf(sensorEvent?.values?.get(0)),
             SimpleXYSeries.ArrayFormat.Y_VALS_ONLY
@@ -245,7 +302,7 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
             listOf(sensorEvent?.values?.get(2)),
             SimpleXYSeries.ArrayFormat.Y_VALS_ONLY
         )
-
+        */
 
         // get rid the oldest sample in history:
        /* if (rollHistorySeries.size() > HISTORY_SIZE) {
@@ -254,9 +311,8 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
             azimuthHistorySeries.removeFirst()
 
         }*/
-        if (sinusHistorySeries.size() > HISTORY_SIZE) {
-            sinusHistorySeries.removeFirst()
-        }
+
+
 
         // add the latest history sample:
 
@@ -264,19 +320,9 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
         //pitchHistorySeries.addLast(null,sensorEvent?.values?.get(1))
         //rollHistorySeries.addLast(null,sensorEvent?.values?.get(2))
 
-        var i : Int
 
 
-        for ( i in sinusList){
 
-            sinusHistorySeries.addLast(null,i)
-
-            Log.d("sinusHistorySeriesSize", "${sinusHistorySeries.size()}")
-            Log.d("SinusList Size","${sinusList.size}")
-        }
-
-
-        Log.d("data","")
 
 
 
@@ -299,10 +345,10 @@ class real_time_graph : AppCompatActivity() , SensorEventListener {
 
 */
     }
-
+*//*
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
 
-    }
+    }*/
     fun generateSinusoidalData(
         amplitude: Double,
         frequency: Double,
