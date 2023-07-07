@@ -8,6 +8,8 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.WindowInsets
@@ -35,7 +37,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 class real_time_graph : AppCompatActivity()  {
-    private val HISTORY_SIZE = 100.0
+    private val HISTORY_SIZE = 50.0
 
     //private lateinit var sensorMgr: SensorManager
     //private lateinit var orSensor : Sensor
@@ -63,6 +65,8 @@ class real_time_graph : AppCompatActivity()  {
     private lateinit var rollHistorySeriesColor : LineAndPointFormatter
     private lateinit var sinusHistorySeriesColor : LineAndPointFormatter
 
+    private lateinit var countDownTimer: CountDownTimer
+
     private lateinit var redrawer: Redrawer
 
 
@@ -75,6 +79,7 @@ class real_time_graph : AppCompatActivity()  {
         var startButton: Button = findViewById(R.id.startButton)
         var graphIsFinish: Boolean = false
         var updateButtonIsActive = true
+        var timer_3 : Boolean = false
         //var graphController : Boolean = true
 
         // setup the APR Levels plot
@@ -210,7 +215,7 @@ class real_time_graph : AppCompatActivity()  {
         redrawer = Redrawer(
             listOf(aprHistoryPlot, aprLevelsPlot),
             33.3f,
-            true
+            false
         )
 
 
@@ -218,21 +223,40 @@ class real_time_graph : AppCompatActivity()  {
             if (updateButtonIsActive) {
                 Thread {
                     while (true) {
-                        val sinusList = generateSinusoidalData(1.0, 1.0, 0.0, 10)
+                        val sinusList = generateSinusoidalData(0.5, 1.0, 0.0, 30)
 
                         if (sinusHistorySeries.size() > HISTORY_SIZE) {
-                            val numToRemove = sinusHistorySeries.size() - HISTORY_SIZE
-
-                            for (i in 0 until numToRemove.toInt()) {
-                                sinusHistorySeries.removeFirst()
-                            }
+                            sinusHistorySeries.removeFirst()
                         }
+
 
                         for (i in sinusList) {
                             sinusHistorySeries.addLast(null, i)
+                            Thread.sleep(1)
                         }
+                        if (timer_3){
+                            sinusHistorySeries.clear()
+                            timer_3 = false
+                        }
+                        Log.d("data","${sinusHistorySeries.size()}")
                     }
                 }.start()
+
+
+
+                    countDownTimer = object : CountDownTimer(5000, 1000) {
+                        override fun onTick(p0: Long) {
+                        }
+
+                        override fun onFinish() {
+                            countDownTimer.start()
+                            timer_3 = true
+                        }
+                    }
+                countDownTimer.start()
+
+
+
                 updateButtonIsActive = false
             }
         }
@@ -253,8 +277,8 @@ class real_time_graph : AppCompatActivity()  {
             }
         }
 
-        window.decorView.systemUiVisibility =
-            (View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+        /*window.decorView.systemUiVisibility =
+            (View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)*/
     }
 
     @Override
