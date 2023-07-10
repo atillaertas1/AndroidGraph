@@ -222,6 +222,7 @@ class real_time_graph : AppCompatActivity()  {
         updateButton.setOnClickListener {
             if (updateButtonIsActive) {
                 Thread {
+                    var index = 0
                     while (true) {
                         val sinusList = generateSinusoidalData(0.5, 1.0, 0.0, 30)
 
@@ -229,22 +230,31 @@ class real_time_graph : AppCompatActivity()  {
                             sinusHistorySeries.removeFirst()
                         }
 
-
-                        for (i in sinusList) {
-                            sinusHistorySeries.addLast(null, i)
-                            Thread.sleep(1)
+                        val element = sinusList.getOrNull(index)
+                        if (element != null){
+                            sinusHistorySeries.addLast(null,element)
+                            Thread.sleep(30)
                         }
+
+
                         if (timer_3){
                             sinusHistorySeries.clear()
                             timer_3 = false
                         }
+
+
                         Log.d("data","${sinusHistorySeries.size()}")
+                        index++
+
+                        if (index >= sinusList.size){
+                            index = 0
+                        }
                     }
                 }.start()
 
 
-
-                    countDownTimer = object : CountDownTimer(5000, 1000) {
+                /*
+                    countDownTimer = object : CountDownTimer(10000, 1000) {
                         override fun onTick(p0: Long) {
                         }
 
@@ -253,7 +263,7 @@ class real_time_graph : AppCompatActivity()  {
                             timer_3 = true
                         }
                     }
-                countDownTimer.start()
+                countDownTimer.start()*/
 
 
 
