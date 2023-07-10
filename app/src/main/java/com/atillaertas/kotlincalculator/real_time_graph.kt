@@ -1,18 +1,10 @@
 package com.atillaertas.kotlincalculator
 
-import android.content.Context
 import android.graphics.Color
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.CountDownTimer
-import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.view.WindowInsets
 import android.widget.Button
 import android.widget.CheckBox
 import com.androidplot.util.PixelUtils
@@ -20,24 +12,17 @@ import com.androidplot.util.PlotStatistics
 import com.androidplot.util.Redrawer
 import com.androidplot.xy.BarFormatter
 import com.androidplot.xy.BarRenderer
-import com.androidplot.xy.BarRenderer.Bar
 import com.androidplot.xy.BoundaryMode
-import com.androidplot.xy.BubbleSeries
 import com.androidplot.xy.LineAndPointFormatter
 import com.androidplot.xy.SimpleXYSeries
 import com.androidplot.xy.StepMode
 import com.androidplot.xy.XYGraphWidget
 import com.androidplot.xy.XYPlot
-import com.androidplot.xy.XYSeries
-import java.lang.Math.pow
 import java.text.DecimalFormat
-import kotlin.math.atan
-import kotlin.math.pow
 import kotlin.math.sin
-import kotlin.math.sqrt
 
 class real_time_graph : AppCompatActivity()  {
-    private val HISTORY_SIZE = 50.0
+    private val HISTORY_SIZE =80.0
 
     //private lateinit var sensorMgr: SensorManager
     //private lateinit var orSensor : Sensor
@@ -65,7 +50,7 @@ class real_time_graph : AppCompatActivity()  {
     private lateinit var rollHistorySeriesColor : LineAndPointFormatter
     private lateinit var sinusHistorySeriesColor : LineAndPointFormatter
 
-    private lateinit var countDownTimer: CountDownTimer
+    //private lateinit var countDownTimer: CountDownTimer
 
     private lateinit var redrawer: Redrawer
 
@@ -74,11 +59,11 @@ class real_time_graph : AppCompatActivity()  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_real_time_graph)
 
-        var updateButton: Button = findViewById(R.id.updateButton)
-        var stopButton: Button = findViewById(R.id.stopButton)
         var startButton: Button = findViewById(R.id.startButton)
+        var stopButton: Button = findViewById(R.id.stopButton)
+        var contunieButton: Button = findViewById(R.id.contunieButton)
         var graphIsFinish: Boolean = false
-        var updateButtonIsActive = true
+        var startButtonIsActive = true
         var timer_3 : Boolean = false
         //var graphController : Boolean = true
 
@@ -135,9 +120,9 @@ class real_time_graph : AppCompatActivity()  {
         rollHistorySeriesColor = LineAndPointFormatter(Color.rgb(200, 100, 100), null, null, null)
         sinusHistorySeriesColor = LineAndPointFormatter(Color.rgb(200, 50, 100), null, null, null)
 
-        aprHistoryPlot.setRangeBoundaries(-2, 2, BoundaryMode.FIXED)
-        aprHistoryPlot.setDomainBoundaries(0, HISTORY_SIZE, BoundaryMode.FIXED)
-        aprHistoryPlot.addSeries(azimuthHistorySeries, azimuthHistorySeriesColor)
+        aprHistoryPlot.setRangeBoundaries(-2, 2, BoundaryMode.FIXED)    // y ekseni
+        aprHistoryPlot.setDomainBoundaries(0, HISTORY_SIZE, BoundaryMode.FIXED)     // x ekseni
+        aprHistoryPlot.addSeries(azimuthHistorySeries, azimuthHistorySeriesColor)   //azimuth,pitch,roll sensorlerle alakali
         aprHistoryPlot.addSeries(pitchHistorySeries, pitchHistorySeriesColor)
         aprHistoryPlot.addSeries(rollHistorySeries, rollHistorySeriesColor)
         aprHistoryPlot.addSeries(sinusHistorySeries, sinusHistorySeriesColor)
@@ -219,8 +204,8 @@ class real_time_graph : AppCompatActivity()  {
         )
 
 
-        updateButton.setOnClickListener {
-            if (updateButtonIsActive) {
+        startButton.setOnClickListener {
+            if (startButtonIsActive) {
                 Thread {
                     var index = 0
                     while (true) {
@@ -230,20 +215,25 @@ class real_time_graph : AppCompatActivity()  {
                             sinusHistorySeries.removeFirst()
                         }
 
+
+                        // elemanlari tek tek gönderiyoruz ki performans sorunları olmasın
                         val element = sinusList.getOrNull(index)
                         if (element != null){
                             sinusHistorySeries.addLast(null,element)
                             Thread.sleep(30)
                         }
 
-
+                        /*
                         if (timer_3){
-                            sinusHistorySeries.clear()
+                            sinusHistorySeries.clear()        //  COUNTDOWNTIMERDAKI SURE BITTIGI ZAMAN TUM SERIYI SIFIRLIYOR
                             timer_3 = false
-                        }
+                        }*/
 
 
                         Log.d("data","${sinusHistorySeries.size()}")
+                        Log.d("graphIsFinish","$graphIsFinish")
+                        Log.d("startButton","$startButtonIsActive")
+
                         index++
 
                         if (index >= sinusList.size){
@@ -267,7 +257,7 @@ class real_time_graph : AppCompatActivity()  {
 
 
 
-                updateButtonIsActive = false
+                startButtonIsActive = false
             }
         }
 
@@ -276,7 +266,7 @@ class real_time_graph : AppCompatActivity()  {
             graphIsFinish = true
         }
 
-        startButton.setOnClickListener {
+        contunieButton.setOnClickListener {
             if (graphIsFinish) {
                 redrawer = Redrawer(
                     listOf(aprHistoryPlot, aprLevelsPlot),
@@ -295,9 +285,6 @@ class real_time_graph : AppCompatActivity()  {
     public override fun onResume() {
         super.onResume()
         redrawer.start()
-
-        Log.d("deneme","deneme")
-
     }
 
     @Override
