@@ -6,41 +6,67 @@
     android:layout_height="fill_parent">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_weight="1"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
 
         <com.androidplot.xy.XYPlot
-            style="@style/APDefacto.Dark"
-            android:id="@+id/aprLevelsPlot"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_margin="0dp"
-            android:layout_weight="3"
-            android:layout_marginTop="10px"
-            android:layout_marginLeft="10px"
-            android:layout_marginRight="10px"
-            ap:renderMode="use_background_thread"
-            ap:title="Levels"/>
-
-        <com.androidplot.xy.XYPlot
-            style="@style/APDefacto.Dark"
             android:id="@+id/aprHistoryPlot"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_margin="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="10px"
-            android:layout_marginLeft="10px"
-            android:layout_marginRight="10px"
+            style="@style/APDefacto"
             androidPlot.backgroundPaint.color="#000000"
             androidPlot.borderPaint.color="#000000"
             androidplot.renderMode="use_background_thread"
-            ap:title="History"
+            android:layout_width="wrap_content"
+            android:layout_height="243dp"
+            android:layout_margin="0dp"
+            android:layout_marginLeft="10px"
+            android:layout_marginTop="10px"
+            android:layout_marginRight="10px"
+            android:layout_weight="1"
             ap:domainTitle="Domain"
-            ap:rangeTitle="Range"/>
+            ap:rangeTitle="Range"
+            ap:title="History"
+            ap:borderThickness="0dp"/>
+
+        <com.androidplot.xy.XYPlot
+            android:id="@+id/aprHistory_2_Plot"
+            style="@style/APDefacto"
+            androidPlot.backgroundPaint.color="#000000"
+            androidPlot.borderPaint.color="#000000"
+            androidplot.renderMode="use_background_thread"
+            android:layout_width="fill_parent"
+            android:layout_height="243dp"
+            android:layout_margin="0dp"
+            android:layout_marginLeft="10px"
+            android:layout_marginTop="10px"
+            android:layout_marginRight="10px"
+            android:layout_weight="1"
+            ap:domainTitle="Domain"
+            ap:rangeTitle="Range"
+            ap:title="History"
+            ap:borderThickness="0dp"/>
+
+        <com.androidplot.xy.XYPlot
+            android:id="@+id/aprHistory_3_Plot"
+            style="@style/APDefacto"
+            androidPlot.backgroundPaint.color="#000000"
+            androidPlot.borderPaint.color="#000000"
+            androidplot.renderMode="use_background_thread"
+            android:layout_width="fill_parent"
+            android:layout_height="243dp"
+            android:layout_margin="0dp"
+            android:layout_marginLeft="10px"
+            android:layout_marginTop="10px"
+            android:layout_marginRight="10px"
+            android:layout_weight="1"
+            ap:domainTitle="Domain"
+            ap:rangeTitle="Range"
+            ap:title="History"
+            ap:borderThickness="0dp"/>
 
     </LinearLayout>
 
