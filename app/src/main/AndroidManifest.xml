@@ -5,9 +5,7 @@
     <uses-permission
         android:name="android.permission.ACCESS_FINE_LOCATION"
         tools:ignore="CoarseFineLocation" />
-    <uses-permission
-        android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -19,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KotlinCalculator"
         tools:targetApi="24">
+        <activity
+            android:name=".JNIActivity"
+            android:exported="false" />
 
         <receiver
             android:name=".BootReceiver"
@@ -26,10 +27,10 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
-
 
         <activity
             android:name=".sinus_graph"
@@ -45,7 +46,7 @@
         </activity>
         <activity
             android:name=".MainActivity3"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".MainActivity2"
             android:exported="true">

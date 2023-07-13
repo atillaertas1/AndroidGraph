@@ -45,10 +45,10 @@
             android:layout_marginTop="10px"
             android:layout_marginRight="10px"
             android:layout_weight="1"
+            ap:borderThickness="0dp"
             ap:domainTitle="Domain"
             ap:rangeTitle="Range"
-            ap:title="History"
-            ap:borderThickness="0dp"/>
+            ap:title="History" />
 
         <com.androidplot.xy.XYPlot
             android:id="@+id/aprHistory_3_Plot"
