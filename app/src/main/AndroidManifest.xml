@@ -5,7 +5,22 @@
     <uses-permission
         android:name="android.permission.ACCESS_FINE_LOCATION"
         tools:ignore="CoarseFineLocation" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission
+        android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission
+        android:name="android.permission.READ_SETTINGS" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission
+        android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission
+        android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -16,25 +31,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KotlinCalculator"
-        tools:targetApi="24">
-        <activity
-            android:name=".JNIActivity"
-            android:exported="false" />
+        tools:targetApi="24"
+        android:name=".serial.Application">
 
-        <receiver
-            android:name=".BootReceiver"
-            android:enabled="true"
+        <activity android:name=".serial.HexConsoleActivity" />
+        <activity android:name=".serial.SerialMainMenu" />
+        <activity android:name=".serial.SerialPortPreferences" />
+        <activity android:name=".serial.ConsoleActivity" />
+        <activity android:name=".serial.LoopbackActivity" />
+        <activity android:name=".serial.Sending01010101Activity" />
+        <receiver android:name=".BroadcastReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.HOME"/>
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".sinus_graph"
-            android:exported="false" />
+
+
         <activity
             android:name=".real_time_graph"
             android:exported="true">
@@ -44,33 +59,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity3"
-            android:exported="true" />
-        <activity
-            android:name=".MainActivity2"
-            android:exported="true">
 
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
-        </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-
-            </intent-filter>
-            -->
-        </activity>
     </application>
+
 
 </manifest>

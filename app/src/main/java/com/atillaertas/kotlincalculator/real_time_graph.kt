@@ -1,5 +1,6 @@
 package com.atillaertas.kotlincalculator
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,6 +20,8 @@ import com.androidplot.xy.Step
 import com.androidplot.xy.StepMode
 import com.androidplot.xy.XYGraphWidget
 import com.androidplot.xy.XYPlot
+import com.atillaertas.kotlincalculator.serial.Sending01010101Activity
+import com.atillaertas.kotlincalculator.serial.SerialMainMenu
 import java.text.DecimalFormat
 import kotlin.math.sin
 
@@ -48,6 +51,7 @@ class real_time_graph : AppCompatActivity()  {
         var startButton: Button = findViewById(R.id.startButton)
         var stopButton: Button = findViewById(R.id.stopButton)
         var contunieButton: Button = findViewById(R.id.contunieButton)
+        var sendButton: Button = findViewById(R.id.sendButton)
         var graphIsFinish: Boolean = false
         var startButtonIsActive = true
 
@@ -251,6 +255,11 @@ class real_time_graph : AppCompatActivity()  {
                 )
                 redrawer.start()
             }
+        }
+
+        sendButton.setOnClickListener {
+            val intent = Intent(this,SerialMainMenu::class.java)
+            startActivity(intent)
         }
 
     }

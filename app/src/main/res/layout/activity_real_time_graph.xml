@@ -108,4 +108,16 @@
             android:text="Continue" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="uart communication" />
+
+    </LinearLayout>
 </LinearLayout>
