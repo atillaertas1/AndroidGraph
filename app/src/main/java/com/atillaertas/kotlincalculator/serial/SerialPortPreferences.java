@@ -24,7 +24,7 @@ public class SerialPortPreferences extends AppCompatActivity{
 
 		SharedPreferences sharedPreferences = getSharedPreferences("com.atillaertas.kotlincalculator.serial", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPreferences.edit();
-		editor.putString("DEVICE","dev/ttyS4");
+		editor.putString("DEVICE","dev/ttyS1");
 		editor.putString("BAUDRATE","115200");
 		editor.apply();
 	}

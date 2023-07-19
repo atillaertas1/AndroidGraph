@@ -19,10 +19,10 @@ public class Application extends android.app.Application {
 		if (mSerialPort == null) {
 			/* Read serial port parameters */
 			SharedPreferences sp = getSharedPreferences("com.atillaertas.kotlincalculator.serial", MODE_PRIVATE);
-			String path = sp.getString("DEVICE", "");
-			int baudrate = Integer.decode(sp.getString("BAUDRATE", "-1"));
+			String path = "dev/ttyS1";
+			int baudrate = 115200;
 			Log.d("devicename","" + path);
-			Log.d("devicename","" + baudrate);
+			Log.d("baudrate","" + baudrate);
 
 			/* Check parameters */
 			if ((path.length() == 0) || (baudrate == -1)) {
