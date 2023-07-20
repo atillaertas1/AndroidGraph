@@ -49,19 +49,19 @@ public class ConsoleActivity extends SerialPortActivity {
 
 	@Override
 	protected void onDataReceived(final byte[] buffer, final int size) throws UnsupportedEncodingException {
-		String string = new String(buffer,0,size);
-		Log.d(TAG,"onDataReceived buffer = " + string);
+		StringBuilder stringBuilder = new StringBuilder();
 
-		try {
-			Thread.sleep(50);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		for (int i = 0; i < size; i++) {
+			char c = (char) buffer[i];
+			stringBuilder.append(c);
 		}
+
+		final String receivedData = stringBuilder.toString();
 
 		runOnUiThread(new Runnable() {
 			public void run() {
 				if (mReception != null) {
-					mReception.append(new String(buffer, 0, size));
+					mReception.append(receivedData);
 				}
 			}
 		});

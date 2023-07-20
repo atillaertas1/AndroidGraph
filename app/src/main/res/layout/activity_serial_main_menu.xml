@@ -10,9 +10,12 @@
 
     <Button
         android:id="@+id/ButtonConsole"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
         android:text="CONSOLE" />
 
     <Button

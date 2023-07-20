@@ -16,8 +16,10 @@ public class Sending01010101Activity extends SerialPortActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_serial_sending01010101);
-		mBuffer = new byte[1024];
-		Arrays.fill(mBuffer, (byte) 0x55);
+		mBuffer = new byte[128];
+		Arrays.fill(mBuffer, (byte) 0x59);
+
+
 		if (mSerialPort != null) {
 			mSendingThread = new SendingThread();
 			mSendingThread.start();
@@ -36,12 +38,15 @@ public class Sending01010101Activity extends SerialPortActivity {
 				try {
 					if (mOutputStream != null) {
 						mOutputStream.write(mBuffer);
+						sleep(10);
 					} else {
 						return;
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 					return;
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
 				}
 			}
 		}

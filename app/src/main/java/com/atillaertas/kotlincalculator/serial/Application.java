@@ -18,7 +18,6 @@ public class Application extends android.app.Application {
 	public SerialPort getSerialPort() throws SecurityException, IOException, InvalidParameterException {
 		if (mSerialPort == null) {
 			/* Read serial port parameters */
-			SharedPreferences sp = getSharedPreferences("com.atillaertas.kotlincalculator.serial", MODE_PRIVATE);
 			String path = "dev/ttyS1";
 			int baudrate = 115200;
 			Log.d("devicename","" + path);
