@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import android_serialport_api.SerialPort;
@@ -24,9 +23,10 @@ public class Application extends android.app.Application {
 			Log.d("baudrate","" + baudrate);
 
 			/* Check parameters */
+			/*
 			if ((path.length() == 0) || (baudrate == -1)) {
 				throw new InvalidParameterException();
-			}
+			}*/
 
 			System.out.println("ysjie path = " + path + ",baudrate = " + baudrate);
 			/* Open the serial port */
