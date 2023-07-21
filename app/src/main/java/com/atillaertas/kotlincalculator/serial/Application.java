@@ -17,8 +17,8 @@ public class Application extends android.app.Application {
 	public SerialPort getSerialPort() throws SecurityException, IOException, InvalidParameterException {
 		if (mSerialPort == null) {
 			/* Read serial port parameters */
-			String path = "dev/ttyS1";
-			int baudrate = 115200;
+			String path = "dev/ttyS3";
+			int baudrate = 921600;
 			Log.d("devicename","" + path);
 			Log.d("baudrate","" + baudrate);
 

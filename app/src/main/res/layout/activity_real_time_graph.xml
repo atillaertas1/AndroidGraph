@@ -13,24 +13,23 @@
         android:orientation="vertical">
 
 
-
         <com.androidplot.xy.XYPlot
             android:id="@+id/aprHistoryPlot"
             style="@style/APDefacto"
             androidPlot.backgroundPaint.color="#000000"
             androidPlot.borderPaint.color="#000000"
             androidplot.renderMode="use_background_thread"
-            android:layout_width="wrap_content"
+            android:layout_width="1365dp"
             android:layout_height="243dp"
             android:layout_margin="0dp"
             android:layout_marginLeft="10px"
             android:layout_marginTop="10px"
             android:layout_marginRight="10px"
             android:layout_weight="1"
+            ap:borderThickness="0dp"
             ap:domainTitle="Domain"
             ap:rangeTitle="Range"
-            ap:title="History"
-            ap:borderThickness="0dp"/>
+            ap:title="History" />
 
         <com.androidplot.xy.XYPlot
             android:id="@+id/aprHistory_2_Plot"
@@ -73,6 +72,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="#000000"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -87,37 +87,48 @@
             android:id="@+id/showFpsCb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Show FPS" />
+            android:text="Show FPS"
+            android:textColor="@color/primary"
+            ap:buttonIconTint="#BB86FC" />
 
         <Button
             android:id="@+id/startButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start" />
+            android:background="@drawable/button_border"
+            android:text="Start"
+            android:textColor="@color/background" />
 
         <Button
             android:id="@+id/stopButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Stop" />
+            android:background="@drawable/button_border"
+            android:text="Stop"
+            android:textColor="@color/background" />
 
         <Button
             android:id="@+id/contunieButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Continue" />
+            android:background="@drawable/button_border"
+            android:text="Continue"
+            android:textColor="@color/background" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:background="#000000">
 
         <Button
             android:id="@+id/sendButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="uart communication" />
+            android:layout_height="match_parent"
+            android:background="@drawable/button_border"
+            android:text="UART Communication"
+            android:textColor="@color/background" />
 
     </LinearLayout>
 </LinearLayout>

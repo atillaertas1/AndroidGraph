@@ -31,12 +31,6 @@ public class SerialMainMenu extends Activity {
 			}
 		});
 
-        final Button buttonLoopback = (Button)findViewById(R.id.ButtonLoopback);
-        buttonLoopback.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				startActivity(new Intent(SerialMainMenu.this, LoopbackActivity.class));
-			}
-		});
 
         final Button button01010101 = (Button)findViewById(R.id.Button01010101);
         button01010101.setOnClickListener(new View.OnClickListener() {

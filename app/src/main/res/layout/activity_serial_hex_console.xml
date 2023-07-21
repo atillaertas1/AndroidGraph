@@ -2,32 +2,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="#000000"
     android:keepScreenOn="true"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/EditHexTextReception"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@drawable/textview_border"
         android:gravity="top"
         android:hint="Alınan Veri"
+        android:isScrollContainer="true"
+        android:padding="8dp"
         android:scrollbarStyle="insideOverlay"
-        android:isScrollContainer="true">
-    </EditText>
+        android:textColor="@color/error"
+        android:textColorHint="@color/error"></EditText>
 
     <EditText
         android:id="@+id/EditHexTextEmission"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="357dp"
+        android:background="@drawable/textview_border"
+        android:gravity="top"
         android:hint="Gönderilecek Veri"
-        android:lines="1" >
+        android:lines="1"
+        android:padding="8dp"
+        android:textColor="@color/error"
+        android:textColorHint="@color/error">
+
     </EditText>
 
     <Button
         android:id="@+id/btnHexSend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="HEX GONDER"/>
+        android:background="@drawable/button_border"
+        android:text="HEX GONDER" />
 
 </LinearLayout>

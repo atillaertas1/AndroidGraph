@@ -1,58 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linearLayout1"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentTop="true"
-    android:orientation="vertical" >
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
 
-
-    <Button
-        android:id="@+id/ButtonConsole"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:textColor="#ffffff"
-        android:textSize="16sp"
-        android:text="CONSOLE" />
-
-    <Button
-        android:id="@+id/ButtonHexConsole"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="HEX CONSOLE" />
-
-    <Button
-        android:id="@+id/ButtonLoopback"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="LOOPBACK MENU" />
-
-    <Button
-        android:id="@+id/Button01010101"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="VERI GONDERME" />
-
-    <!--
-    <Button
-        android:id="@+id/ButtonAbout"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="About" />
-    -->
 
     <Button
         android:id="@+id/ButtonQuit"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="GRAFIGE GERI DON" />
+        android:layout_width="277dp"
+        android:layout_height="121dp"
+        android:layout_marginEnd="300dp"
+        android:layout_marginBottom="200dp"
+        android:background="@drawable/button_border"
+        android:text="QUIT"
+        android:textColor="@color/background"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toEndOf="@+id/ButtonConsole"
+        app:layout_constraintTop_toBottomOf="@+id/ButtonHexConsole" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/ButtonHexConsole"
+        android:layout_width="277dp"
+        android:layout_height="121dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="300dp"
+        android:background="@drawable/button_border"
+        android:text="HEX CONSOLE"
+        android:textColor="@color/background"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ButtonConsole"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/Button01010101"
+        android:layout_width="277dp"
+        android:layout_height="121dp"
+        android:layout_marginStart="300dp"
+        android:layout_marginBottom="200dp"
+        android:background="@drawable/button_border"
+        android:text="SEND"
+        android:textColor="@color/background"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ButtonConsole" />
+
+    <Button
+        android:id="@+id/ButtonConsole"
+        android:layout_width="277dp"
+        android:layout_height="121dp"
+        android:layout_marginStart="300dp"
+        android:layout_marginTop="200dp"
+        android:background="@drawable/button_border"
+        android:text="CONSOLE"
+        android:textColor="@color/background"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="ButtonConsole" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="ButtonConsole" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
