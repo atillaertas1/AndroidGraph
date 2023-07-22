@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ap="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="#000000"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -62,16 +63,16 @@
             android:layout_marginTop="10px"
             android:layout_marginRight="10px"
             android:layout_weight="1"
+            ap:borderThickness="0dp"
             ap:domainTitle="Domain"
             ap:rangeTitle="Range"
-            ap:title="History"
-            ap:borderThickness="0dp"/>
+            ap:title="History" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="59dp"
         android:background="#000000"
         android:gravity="center"
         android:orientation="horizontal">
@@ -97,7 +98,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/button_border"
             android:text="Start"
-            android:textColor="@color/background" />
+            android:textColor="@color/background"
+            android:layout_marginRight="2dp"/>
 
         <Button
             android:id="@+id/stopButton"
@@ -120,7 +122,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#000000">
+        android:background="#000000"
+        android:layout_marginTop="2dp">
 
         <Button
             android:id="@+id/sendButton"
@@ -128,6 +131,22 @@
             android:layout_height="match_parent"
             android:background="@drawable/button_border"
             android:text="UART Communication"
+            android:textColor="@color/background" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="2dp"
+        android:background="#000000">
+
+        <Button
+            android:id="@+id/bluetoothButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/button_border"
+            android:text="Bluetooth Console"
             android:textColor="@color/background" />
 
     </LinearLayout>

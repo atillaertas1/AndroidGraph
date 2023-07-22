@@ -8,19 +8,14 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
-import com.androidplot.util.PixelUtils
 import com.androidplot.util.PlotStatistics
 import com.androidplot.util.Redrawer
-import com.androidplot.xy.BarFormatter
-import com.androidplot.xy.BarRenderer
 import com.androidplot.xy.BoundaryMode
 import com.androidplot.xy.LineAndPointFormatter
 import com.androidplot.xy.SimpleXYSeries
-import com.androidplot.xy.Step
 import com.androidplot.xy.StepMode
 import com.androidplot.xy.XYGraphWidget
 import com.androidplot.xy.XYPlot
-import com.atillaertas.kotlincalculator.serial.Sending01010101Activity
 import com.atillaertas.kotlincalculator.serial.SerialMainMenu
 import java.text.DecimalFormat
 import kotlin.math.sin
@@ -52,6 +47,7 @@ class real_time_graph : AppCompatActivity()  {
         var stopButton: Button = findViewById(R.id.stopButton)
         var contunieButton: Button = findViewById(R.id.contunieButton)
         var sendButton: Button = findViewById(R.id.sendButton)
+        var bluetoothButton : Button = findViewById(R.id.bluetoothButton)
         var graphIsFinish: Boolean = false
         var startButtonIsActive = true
 
@@ -259,6 +255,11 @@ class real_time_graph : AppCompatActivity()  {
 
         sendButton.setOnClickListener {
             val intent = Intent(this,SerialMainMenu::class.java)
+            startActivity(intent)
+        }
+
+        bluetoothButton.setOnClickListener {
+            val intent = Intent(this,BluetoothActivity::class.java)
             startActivity(intent)
         }
 
