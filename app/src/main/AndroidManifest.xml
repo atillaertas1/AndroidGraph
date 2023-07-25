@@ -37,9 +37,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KotlinCalculator"
         tools:targetApi="24" >
-        <activity
-            android:name=".BluetoothActivity"
-            android:exported="false" />
         <activity android:name=".serial.HexConsoleActivity" />
         <activity android:name=".serial.SerialMainMenu" />
         <activity android:name=".serial.ConsoleActivity" />

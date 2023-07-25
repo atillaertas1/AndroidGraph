@@ -257,12 +257,12 @@ class real_time_graph : AppCompatActivity()  {
             val intent = Intent(this,SerialMainMenu::class.java)
             startActivity(intent)
         }
-
+/*
         bluetoothButton.setOnClickListener {
             val intent = Intent(this,BluetoothActivity::class.java)
             startActivity(intent)
         }
-
+*/
     }
 
     @Override
