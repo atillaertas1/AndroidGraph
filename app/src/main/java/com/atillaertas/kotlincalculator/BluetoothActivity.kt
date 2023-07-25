@@ -4,6 +4,7 @@ import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
+import android.bluetooth.BluetoothServerSocket
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -67,7 +68,7 @@ class BluetoothActivity : AppCompatActivity() {
                     // object and its info from the Intent.
                     if (ActivityCompat.checkSelfPermission(
                             this@BluetoothActivity,
-                            Manifest.permission.BLUETOOTH_CONNECT
+                            Manifest.permission.BLUETOOTH
                     ) != PackageManager.PERMISSION_GRANTED){
                         val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                         val deviceName = device?.name
@@ -79,6 +80,7 @@ class BluetoothActivity : AppCompatActivity() {
             }
         }
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
